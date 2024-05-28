@@ -1,10 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">Create Order</h1>
+            {% if user.is_authenticated %}
+            <div class="alert alert-info">
+                <p>Do you want to proceed with your default address?</p>
+                <p><strong>Shipping Address:</strong> {{ default_address.street }}, {{ default_address.city }}, {{ default_address.state }}, {{ default_address.postcode }}</p>
+                <p><strong>Billing Address:</strong> {{ default_address.street }}, {{ default_address.city }}, {{ default_address.state }}, {{ default_address.postcode }}</p>
+            </div>
+
+            <form method="post" class="mb-4">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="default_address_form">
+
+                <div class="form-group">
+                    <label for="new_street">Street:</label>
+                    <input type="text" name="default_street" value="{{ default_address.street }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_city">City:</label>
+                    <input type="text" name="default_city" value="{{ default_address.city }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_state">State:</label>
+                    <input type="text" name="default_state" value="{{ default_address.state }}" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_postcode">Postcode:</label>
+                    <input type="text" name="default_postcode" value="{{ default_address.postcode }}" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Use Default Address</button>
+            </form>
+
+            <hr>
+
+            <h2 class="text-center">New Address Information</h2>
+            <form method="post" class="mb-4">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="new_address_form">
+
+                <div class="form-group">
+                    <label for="new_street">Street:</label>
+                    <input type="text" name="new_street" id="new_street" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_city">City:</label>
+                    <input type="text" name="new_city" id="new_city" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_state">State:</label>
+                    <input type="text" name="new_state" id="new_state" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_postcode">Postcode:</label>
+                    <input type="text" name="new_postcode" id="new_postcode" class="form-control">
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="user_separate_billing_address" name="separate_billing_address" onclick="toggleUserBillingAddressForm()">
+                    <label class="form-check-label" for="user_separate_billing_address">Different billing address?</label>
+                </div>
+
+                <div id="user_billing_address_form" style="display:none;">
+                    <h2 class="text-center">Billing Address Information</h2>
+                    <div class="form-group">
+                        <label for="new_billing_street">Billing Street:</label>
+                        <input type="text" name="new_billing_street" id="user_new_billing_street" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_billing_city">Billing City:</label>
+                        <input type="text" name="new_billing_city" id="user_new_billing_city" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_billing_state">Billing State:</label>
+                        <input type="text" name="new_billing_state" id="user_new_billing_state" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_billing_postcode">Billing Postcode:</label>
+                        <input type="text" name="new_billing_postcode" id="user_new_billing_postcode" class="form-control">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">Proceed</button>
+            </form>
+            {% else %}
+            <h2 class="text-center">Guest Address Information</h2>
+            <form method="post" class="mb-4">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="guest_address_form">
+
+                <div class="form-group">
+                    <label for="guest_street">Street:</label>
+                    <input type="text" name="new_street" id="guest_street" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="guest_city">City:</label>
+                    <input type="text" name="new_city" id="guest_city" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="guest_state">State:</label>
+                    <input type="text" name="new_state" id="guest_state" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="guest_postcode">Postcode:</label>
+                    <input type="text" name="new_postcode" id="guest_postcode" class="form-control">
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="separate_billing_address" name="separate_billing_address" onclick="toggleBillingAddressForm()">
+                    <label class="form-check-label" for="separate_billing_address">Different billing address?</label>
+                </div>
+
+                <div id="billing_address_form" style="display:none;">
+                    <h2 class="text-center">Billing Address Information</h2>
+                    <div class="form-group">
+                        <label for="new_billing_street">Billing Street:</label>
+                        <input type="text" name="new_billing_street" id="new_billing_street" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_billing_city">Billing City:</label>
+                        <input type="text" name="new_billing_city" id="new_billing_city" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_billing_state">Billing State:</label>
+                        <input type="text" name="new_billing_state" id="new_billing_state" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_billing_postcode">Billing Postcode:</label>
+                        <input type="text" name="new_billing_postcode" id="new_billing_postcode" class="form-control">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-block">Proceed</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleBillingAddressForm() {
+    var checkbox = document.getElementById("separate_billing_address");
+    var form = document.getElementById("billing_address_form");
+    if (checkbox.checked) {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
+
+function toggleUserBillingAddressForm() {
+    var checkbox = document.getElementById("user_separate_billing_address");
+    var form = document.getElementById("user_billing_address_form");
+    if (checkbox.checked){
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
+</script>
+{% endblock %}

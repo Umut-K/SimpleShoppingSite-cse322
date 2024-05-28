@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>My Beautiful Site</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
 
     <style>
         /* Add a black background color to the top navigation */
@@ -41,6 +43,8 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 </head>
 <body>
 
@@ -49,6 +53,16 @@
     <a href="/toy">Toy</a>
     <a href="/library">Library</a>
     <a href="/sss">Simple Shopping Site</a>
+    <div style="float:right">
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}">Profile</a>
+        <a href="{% url 'basket_detail' %}">My Basket</a>
+        <a href="{% url 'basket_detail' %}">My Orders</a>
+        <a href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+        <a href="{% url 'login' %}">LogIn</a>
+        {% endif %}
+    </div>
 </div>
 
 {% block content %}
@@ -65,6 +79,8 @@
         This is a site under construction. Use it at your own risk!
     </blockquote>
 </footer>
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-8 text-center">
+            <h1>Search for Users</h1>
+        </div>
+        <div class="col-md-8 mt-3">
+            <form method="get" class="form-inline justify-content-center">
+                <div class="form-group mb-2">
+                    {{ form.query|add_class:"form-control" }}  <!-- Apply Bootstrap class to input -->
+                </div>
+                <button type="submit" class="btn btn-primary mb-2 ml-2">Search</button>
+            </form>
+        </div>
+    </div>
+    {% if results %}
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2>Search Results</h2>
+            <ul class="list-group">
+                {% for user in results %}
+                    <li class="list-group-item">{{ user.username }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <p class="text-danger">No users found matching your search query.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

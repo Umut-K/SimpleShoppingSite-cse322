@@ -1,10 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="text-success">Order Successful!</h1>
+            <p class="lead">Thank you for your order. Your order ID is <strong>{{ order.id }}</strong>.</p>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <h2>Order Details</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.price }}</td>
+                        <td>${{ item.quantity|multiply:item.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Total Cost: ${{ order.items.all|sum_total_cost|floatformat:2 }}</h3>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <h2>Shipping Address</h2>
+            <p>{{ order.shipping_address.street }}, {{ order.shipping_address.city }}, {{ order.shipping_address.state }}, {{ order.shipping_address.postcode }}</p>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <h2>Billing Address</h2>
+            <p>{{ order.billing_address.street }}, {{ order.billing_address.city }}, {{ order.billing_address.state }}, {{ order.billing_address.postcode }}</p>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 text-center">
+            <a href="{% url 'product_list' %}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p><a href="search">Search Customers</a>
-    <p><a href="create">Create Customer</a>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Welcome to Simple Shopping Site</h1>
+            <p class="lead">Choose an option below to get started</p>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4 text-center">
+            <a href="user_search/" class="btn btn-primary btn-lg btn-block">Search Customers</a>
+        </div>
+        <div class="col-md-4 text-center">
+            <a href="new-product/" class="btn btn-success btn-lg btn-block">Create Product</a>
+        </div>
+        <div class="col-md-4 text-center">
+            <a href="products/" class="btn btn-info btn-lg btn-block">Product List</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

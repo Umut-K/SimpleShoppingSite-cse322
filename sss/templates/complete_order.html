@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">Complete Your Order</h1>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Shipping Address</h5>
+                    <p class="card-text">{{ order.shipping_address.street }}, {{ order.shipping_address.city }}, {{ order.shipping_address.state }}, {{ order.shipping_address.postcode }}</p>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Billing Address</h5>
+                    <p class="card-text">{{ order.billing_address.street }}, {{ order.billing_address.city }}, {{ order.billing_address.state }}, {{ order.billing_address.postcode }}</p>
+                </div>
+            </div>
+
+            <h2 class="mt-5">Order Items</h2>
+            <ul class="list-group">
+                {% for item in order.items.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail mr-3" style="width: 100px; height: 100px;">
+                        {% endif %}
+                        <div>
+                            <h5>{{ item.product.name }}</h5>
+                            <p>Quantity: {{ item.quantity }} X ${{ item.price }}</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-primary badge-pill">${{ item.quantity|multiply:item.price }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+
+            <h3 class="mt-4 text-right">Total Cost: ${{ order.items.all|sum_total_cost|floatformat:2 }}</h3>
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success btn-block">Confirm Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

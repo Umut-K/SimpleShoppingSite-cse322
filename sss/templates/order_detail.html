@@ -1,10 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!-- order_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Order Details</h2>
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+            <p><strong>Billing Address:</strong> {{ order.billing_address }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+            <p><strong>Created At:</strong> {{ order.created_at|date:"F d, Y H:i" }}</p>
+            <h3>Order Items</h3>
+            {% if order.items.all %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4>Total Cost: ${{ total_cost }}</h4>
+            {% else %}
+            <p>No items in this order.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

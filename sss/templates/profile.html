@@ -1,10 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Profile Details</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Joined Date:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+            <p><a href="{% url 'edit_profile' %}" class="btn btn-primary">Update Profile</a></p>  <!-- Link to update profile -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Your Orders</h3>
+            {% if orders %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Shipping Address</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.shipping_address }}</td>
+                        <td>
+                            <a href="{% url 'order_detail' order.id %}" class="btn btn-info">View Details</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>You have no orders placed.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

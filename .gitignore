@@ -1,0 +1,51 @@
+# Ignore environment variables file
+.env
+
+# Ignore SQLite database file
+db.sqlite3
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environment directories
+venv/
+.venv/
+
+# Ignore log files
+*.log
+
+# Ignore compiled files
+*.so
+*.swp
+
+# Ignore Django migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Ignore static and media files (if not part of the repository)
+staticfiles/
+media/
+
+# Ignore IDE-specific files (e.g., for PyCharm)
+.idea/
+.vscode/
+*.iml
+
+# Ignore coverage reports
+coverage/
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+
+# Ignore other sensitive or unnecessary files
+*.log
+*.pot
+*.pyc
+

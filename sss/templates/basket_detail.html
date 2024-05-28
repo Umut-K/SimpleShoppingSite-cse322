@@ -1,18 +1,73 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>Your Basket</h1>
-{% if basket_items %}
-<div>
-    {% for item in basket_items %}
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-        <p>{{ item.product.name }} - Quantity: {{ item.quantity }} ({{ item.product.price }} each)</p>
-        <!-- Add options here if needed, like remove or change quantity -->
-    </div>
-    {% endfor %}
-</div>
-{% else %}
-<p>Your basket is empty.</p>
-{% endif %}
-{% endblock %}
+{% load custom_filters %}
 
+{% block content %}
+<div class="container">
+    <h1>Your Basket</h1>
+    {% if basket_items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in basket_items %}
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" class="img-thumbnail mr-3" style="max-width: 100px;" alt="{{ item.product.name }}">
+                        {% endif %}
+                        <div>
+                            <strong>{{ item.product.name }}</strong><br>
+                            <span>${{ item.product.price }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <form action="{% url 'basket_update' item.product.id %}" method="post" class="form-inline">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="number" name="quantity" class="form-control" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td>${{ item.quantity|multiply:item.product.price }}</td>
+                <td>
+                    <form action="{% url 'basket_remove' item.product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between">
+        <form action="{% url 'clear_basket' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary">Clear Basket</button>
+        </form>
+        <form action="{% url 'create_order' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Proceed</button>
+        </form>
+    </div>
+    {% else %}
+    <p>Your basket is empty.</p>
+    {% endif %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 text-center">
+            <a href="{% url 'product_list' %}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
